@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :require_user_logged_in, only: [:index, :show, :followings, :followers]
+  before_action :require_user_logged_in, only: [:index, :show, :followings, :followers, :followings]
   def index
     @users = User.all.page(params[:page])
   end
@@ -38,6 +38,12 @@ class UsersController < ApplicationController
     counts(@user)
   end
   
+  def favoritings
+    @user = User.find(params[:id])
+    @favoritings = @user.favoritings.page(params[:page])
+    counts(@user)
+  end
+
   private
 
   def user_params

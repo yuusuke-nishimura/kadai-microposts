@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180126013232) do
+ActiveRecord::Schema.define(version: 20180129011722) do
 
   create_table "microposts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "content"
@@ -18,6 +18,16 @@ ActiveRecord::Schema.define(version: 20180126013232) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_microposts_on_user_id"
+  end
+
+  create_table "relations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "user_id"
+    t.bigint "favorite_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["favorite_id"], name: "index_relations_on_favorite_id"
+    t.index ["user_id", "favorite_id"], name: "index_relations_on_user_id_and_favorite_id", unique: true
+    t.index ["user_id"], name: "index_relations_on_user_id"
   end
 
   create_table "relationships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -39,6 +49,8 @@ ActiveRecord::Schema.define(version: 20180126013232) do
   end
 
   add_foreign_key "microposts", "users"
+  add_foreign_key "relations", "microposts", column: "favorite_id"
+  add_foreign_key "relations", "users"
   add_foreign_key "relationships", "users"
   add_foreign_key "relationships", "users", column: "follow_id"
 end
